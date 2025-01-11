@@ -1,0 +1,1 @@
+ self.screen = pg.display.set_mode((1280, 700))
