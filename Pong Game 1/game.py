@@ -55,14 +55,32 @@ class Game:
         self.screen.fill('black')
         pg.draw.line(self.screen, 'white', self.screen_rect.midtop, self.screen_rect.midbottom)
         pg.draw.ellipse(self.screen, 'white', self.ball)
+        pg.draw.rect(self.screen, 'white', self.player_1)
+        pg.draw.rect(self.screen, 'white', self.player_2)
         self._update_ball_position()
+        self._update_player_1_pos()
+        self._update_player_2_pos()
         pg.display.update() #pg.display.flip()
 
     def _check_keydown_events(self, event):
-        pass
+        if event.key == pg.K_UP:
+            self.player_1_speed = -6
+        if event.key == pg.K_DOWN:
+            self.player_1_speed = 6
+        if event.key == pg.K_w:
+            self.player_2_speed = -6
+        if event.key == pg.K_s:
+            self.player_2_speed = 6
 
     def _check_keyup_events(self, event):
-        pass
+        if event.key == pg.K_UP:
+            self.player_1_speed = 0
+        if event.key == pg.K_DOWN:
+            self.player_1_speed = 0
+        if event.key == pg.K_w:
+            self.player_2_speed = 0
+        if event.key == pg.K_s:
+            self.player_2_speed = 0
 
     def _update_ball_position(self):
         self.ball.x += (self.ball_speed_x * self.ball_x_direction)
@@ -70,8 +88,22 @@ class Game:
 
         if self.ball.bottom >= self.screen_rect.bottom or self.ball.top <= 0:
             self.ball_y_direction *= -1
-        if self.ball.left <= self.screen_rect.left or self.ball.right >= self.screen_rect.right:
+        if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
+
+    def _update_player_1_pos(self):
+        self.player_1.y += self.player_1_speed
+        if self.player_1.top < 0:
+            self.player_1.top = 0
+        elif self.player_1.bottom > self.screen_rect.bottom:
+            self.player_1.bottom = self.screen_rect.bottom
+
+    def _update_player_2_pos(self):
+        self.player_2.y += self.player_2_speed
+        if self.player_2.top < 0:
+            self.player_2.top = 0
+        elif self.player_2.bottom > self.screen_rect.bottom:
+            self.player_2.bottom = self.screen_rect.bottom
 
 
 my_game = Game()
