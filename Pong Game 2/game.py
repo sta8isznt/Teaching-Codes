@@ -68,6 +68,8 @@ class Game:
         self._update_ball_position()
         pg.draw.rect(self.screen, 'white', self.player_1)
         pg.draw.rect(self.screen, 'white', self.player_2)
+        self._update_player_1_position()
+        self._update_player_2_position()
         pg.display.update()
 
     def _update_ball_position(self):
@@ -78,6 +80,20 @@ class Game:
             self.ball_y_direction *= -1
         if self.ball.right >= self.screen_rect.right or self.ball.left <= 0:
             self.ball_x_direction *= -1
+
+    def _update_player_1_position(self):
+        self.player_1.y = self.player_1.y + self.player_1_speed
+        if self.player_1.top < 0:
+            self.player_1.top = 0
+        elif self.player_1.bottom > self.screen_rect.bottom:
+            self.player_1.bottom = self.screen_rect.bottom
+
+    def _update_player_2_position(self):
+        self.player_2.y = self.player_2.y + self.player_2_speed
+        if self.player_2.top < 0:
+            self.player_2.top = 0
+        elif self.player_2.bottom > self.screen_rect.bottom:
+            self.player_2.bottom = self.screen_rect.bottom
 
 
 
