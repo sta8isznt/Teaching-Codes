@@ -19,6 +19,35 @@ for i in range(3):
         turtle.left(120)
     turtle.end_fill()
 
+turtle.penup()
+turtle.goto(-20, -200)
+turtle.pendown()
+turtle.fillcolor("brown")
+turtle.begin_fill()
+for i in range(2):
+    turtle.fd(40)
+    turtle.rt(90)
+    turtle.fd(60)
+    turtle.rt(90)
+turtle.end_fill()
+
+turtle.penup()
+turtle.goto(-20, 35)
+turtle.pendown()
+turtle.color("yellow")
+turtle.fillcolor("yellow")
+turtle.begin_fill()
+for i in range(5):
+    turtle.fd(40)
+    turtle.rt(144)
+turtle.end_fill()
+
+for i in range(3):
+    turtle.penup()
+    turtle.goto(triangle_x_positions[i], triangle_y_positions[i])
+    turtle.pendown()
+    turtle.dot(15, "red")
+
 turtle.hideturtle()
 turtle.done()
 
