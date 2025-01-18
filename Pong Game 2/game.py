@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import random
 
 class Game:
     def __init__(self):
@@ -28,6 +29,14 @@ class Game:
         self.player_2.midright = self.screen_rect.midright
         self.player_1_speed = 0
         self.player_2_speed = 0
+
+        #Colors
+        self.colors = ["white", "red", "blue", "green", "pink", "purple"]
+        self.ball_color = self.colors[0]
+
+        # Scores
+        self.player_1_score = 0
+        self.player_2_score = 0
 
     def run(self):
         while True:
@@ -64,7 +73,7 @@ class Game:
     def _update_screen(self):
         self.screen.fill('black')
         pg.draw.line(self.screen, 'white', self.screen_rect.midtop, self.screen_rect.midbottom)
-        pg.draw.ellipse(self.screen, (255,255,255), self.ball)
+        pg.draw.ellipse(self.screen, self.ball_color, self.ball)
         self._update_ball_position()
         pg.draw.rect(self.screen, 'white', self.player_1)
         pg.draw.rect(self.screen, 'white', self.player_2)
@@ -78,8 +87,28 @@ class Game:
 
         if self.ball.bottom >= self.screen_rect.bottom or self.ball.top <= self.screen_rect.top:
             self.ball_y_direction *= -1
-        if self.ball.right >= self.screen_rect.right or self.ball.left <= 0:
+        if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
+            self.ball_color = random.choice(self.colors)
+            self.ball_speed_x += 0.5
+            self.ball_speed_y += 0.5
+
+        if self.ball.right >= self.screen_rect.width - 10:
+            self.point_won("player_1")
+        elif self.ball.left <= 10:
+            self.point_won("player_2")
+
+    def point_won(self, winner):
+        if winner == "player_1":
+            self.player_1_score += 1
+        elif winner == "player_2":
+            self.player_2_score += 1
+
+        self.reset_ball()
+
+    def reset_ball(self):
+        self.ball.x = self.screen_rect.centerx
+        self.ball_speed_x = self.ball_speed_y = 6
 
     def _update_player_1_position(self):
         self.player_1.y = self.player_1.y + self.player_1_speed
