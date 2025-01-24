@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-import time
+import time, random
 
 class Game:
     """The Game Class"""
@@ -104,6 +104,8 @@ class Game:
             self.ball_y_direction *= -1
         if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
+            self.ball_speed_x += 0.5
+            self.ball_speed_y += 0.5
         if self.ball.right >= self.screen_rect.right:
             self.point_won("player_1")
         if self.ball.left <= self.screen_rect.left:
@@ -119,6 +121,11 @@ class Game:
 
     def reset_ball(self):
         self.ball.centerx = self.screen_rect.centerx
+        self.ball.y = random.randint(10, 100)
+        self.ball_x_direction = random.choice([-1, 1])
+        self.ball_y_direction = random.choice([-1, 1])
+        self.ball_speed_x = 6
+        self.ball_speed_y = 6
         time.sleep(1)
 
     def _update_player_1_pos(self):
