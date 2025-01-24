@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import time
 
 class Game:
     """The Game Class"""
@@ -31,6 +32,11 @@ class Game:
         self.player_1_speed = 0
         self.player_2_speed = 0
 
+        # Scoring
+        self.player_1_score = 0
+        self.player_2_score = 0
+        self.score_font = pg.font.Font(None, 80)
+
 
     def run(self):
         """Runs the Game"""
@@ -60,7 +66,15 @@ class Game:
         self._update_ball_position()
         self._update_player_1_pos()
         self._update_player_2_pos()
+        self.update_score()
         pg.display.update() #pg.display.flip()
+
+    def update_score(self):
+        player_1_img = self.score_font.render(str(self.player_1_score), True, 'white', 'black')
+        player_2_img = self.score_font.render(str(self.player_2_score), True, 'white', 'black')
+
+        self.screen.blit(player_1_img, (self.screen_rect.width/4, 20))
+        self.screen.blit(player_2_img, (self.screen_rect.width/4 * 3, 20))
 
     def _check_keydown_events(self, event):
         if event.key == pg.K_UP:
@@ -90,6 +104,22 @@ class Game:
             self.ball_y_direction *= -1
         if self.ball.colliderect(self.player_2) or self.ball.colliderect(self.player_1):
             self.ball_x_direction *= -1
+        if self.ball.right >= self.screen_rect.right:
+            self.point_won("player_1")
+        if self.ball.left <= self.screen_rect.left:
+            self.point_won("player_2")
+
+    def point_won(self, player):
+        if player == "player_1":
+            self.player_1_score += 1
+        elif player == "player_2":
+            self.player_2_score += 1
+
+        self.reset_ball()
+
+    def reset_ball(self):
+        self.ball.centerx = self.screen_rect.centerx
+        time.sleep(1)
 
     def _update_player_1_pos(self):
         self.player_1.y += self.player_1_speed
