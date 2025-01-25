@@ -10,6 +10,7 @@ class Game:
         self.screen = pg.display.set_mode((1280, 700))
         self.screen_rect = self.screen.get_rect()
         pg.display.set_caption("Pong Game")
+        self.bg_image = pg.image.load("bg_image1.bmp")
 
         #Clock Settings
         self.clock = pg.time.Clock()
@@ -37,6 +38,7 @@ class Game:
         # Scores
         self.player_1_score = 0
         self.player_2_score = 0
+        self.score_font = pg.font.Font(None, 80)
 
     def run(self):
         while True:
@@ -72,6 +74,8 @@ class Game:
 
     def _update_screen(self):
         self.screen.fill('black')
+        scaled_bg_image = pg.transform.scale(self.bg_image, (self.screen_rect.width, self.screen_rect.height))
+        self.screen.blit(self.bg_image, (0, 0))
         pg.draw.line(self.screen, 'white', self.screen_rect.midtop, self.screen_rect.midbottom)
         pg.draw.ellipse(self.screen, self.ball_color, self.ball)
         self._update_ball_position()
@@ -79,7 +83,15 @@ class Game:
         pg.draw.rect(self.screen, 'white', self.player_2)
         self._update_player_1_position()
         self._update_player_2_position()
+        self.update_score()
         pg.display.update()
+
+    def update_score(self):
+        player_1_image = self.score_font.render(str(self.player_1_score), True, 'white', 'black')
+        player_2_image = self.score_font.render(str(self.player_2_score), True, 'white', 'black')
+
+        self.screen.blit(player_1_image, (self.screen_rect.width /4, 20))
+        self.screen.blit(player_2_image, (self.screen_rect.width /4 * 3, 20))
 
     def _update_ball_position(self):
         self.ball.x = self.ball.x + (self.ball_speed_x * self.ball_x_direction)
@@ -109,6 +121,10 @@ class Game:
     def reset_ball(self):
         self.ball.x = self.screen_rect.centerx
         self.ball_speed_x = self.ball_speed_y = 6
+        self.ball.y = random.randint(10, 100)
+        self.ball_x_direction = random.choice([-1, 1])
+        self.ball_y_direction = random.choice([-1, 1])
+
 
     def _update_player_1_position(self):
         self.player_1.y = self.player_1.y + self.player_1_speed
