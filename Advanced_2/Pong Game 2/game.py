@@ -143,9 +143,5 @@ class Game:
         elif self.player_2.bottom > self.screen_rect.bottom:
             self.player_2.bottom = self.screen_rect.bottom
 
-
-
-
-
 pong_game = Game()
 pong_game.run()
