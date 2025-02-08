@@ -1,7 +1,3 @@
-info = {'name': 'George',
-        'surname': 'Papadopoulos',
-        'age': 18,
-        'city': 'Athens'}
-
-for key in info:
-    print(info[key])
+info = {'name': "John", "lastname" : "Papadopoulos", "age" : 15, "city": "Athens"}
+for entry in info:
+    print(info[entry])

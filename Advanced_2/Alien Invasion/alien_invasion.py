@@ -1,12 +1,18 @@
 import pygame as pg
 import sys
 
+from settings import Settings
+from ship import Ship
+
 class Alien_Invasion:
     def __init__(self):
         pg.init()
 
+        # General Settings
+        self.settings = Settings()
+
         #screen settings
-        self.screen = pg.display.set_mode((1200, 800))
+        self.screen = pg.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.screen_rect = self.screen.get_rect()
         pg.display.set_caption("Alien Invasion")
 
@@ -19,6 +25,9 @@ class Alien_Invasion:
 
         #clock settings
         self.clock = pg.time.Clock()
+
+        # Ship settings
+        self.ship = Ship(self)
 
     def run(self):
         while True:
@@ -34,6 +43,7 @@ class Alien_Invasion:
 
     def _update_screen(self):
         self.screen.blit(self.bg_image, (0,0))
+        self.ship.blitme()
         pg.display.update()
 
 game = Alien_Invasion()

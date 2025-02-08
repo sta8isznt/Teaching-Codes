@@ -3,25 +3,28 @@ import sys
 import time
 import random
 
+from settings import Settings
+from ship import Ship
 
 class Alien_Invasion:
     def __init__(self):
         pg.init()
         self.backround_image = pg.image.load("images/space_image.jpg")
-        self.spaceship_window = pg.image.load("images/mamalakis.jpg")
+
+        # settings
+        self.settings = Settings()
+
 
         # screen settings
-        self.screen = pg.display.set_mode((1200, 800)) 
+        self.screen = pg.display.set_mode((self.settings.screen_width, self.settings.screen_height)) 
         self.screen_rect = self.screen.get_rect()
         pg.display.set_caption("speis inveiderz")
-        pg.display.set_icon(self.spaceship_window)
 
         #Clock Settings
         self.clock = pg.time.Clock()
 
-        #player settings
-
-
+        # Ship
+        self.ship = Ship(self)
 
     def run(self):
         """Runs the Game"""
@@ -46,8 +49,14 @@ class Alien_Invasion:
         """Updates the screen"""
         self.screen.blit(self.backround_image, (0, 0))
 
-        
+        self.ship.blitme()
         pg.display.update()
+
+    def _check_keydown_events(self, event):
+        pass
+
+    def _check_keyup_events(self, event):
+        pass
 
 
 
