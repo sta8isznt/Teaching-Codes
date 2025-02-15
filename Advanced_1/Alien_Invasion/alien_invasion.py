@@ -30,6 +30,7 @@ class Alien_Invasion:
         """Runs the Game"""
         while True:
             self._check_events()
+            self.ship.update()
             self._update_screen()
             self.clock.tick(60)
             
@@ -53,7 +54,10 @@ class Alien_Invasion:
         pg.display.update()
 
     def _check_keydown_events(self, event):
-        pass
+        if event.key == pg.K_LEFT:
+            self.ship.rect.x -= 1
+        if event.key == pg.K_RIGHT:
+            self.ship.moving_right = True
 
     def _check_keyup_events(self, event):
         pass
