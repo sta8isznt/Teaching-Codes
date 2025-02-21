@@ -16,7 +16,9 @@ class Alien_Invasion:
 
 
         # screen settings
-        self.screen = pg.display.set_mode((self.settings.screen_width, self.settings.screen_height)) 
+        self.screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
         self.screen_rect = self.screen.get_rect()
         pg.display.set_caption("speis inveiderz")
 
