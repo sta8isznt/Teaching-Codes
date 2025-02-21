@@ -1,4 +1,5 @@
 import pygame as pg
+from settings import Settings
 
 class Ship:
     """A class to manage our ship"""
@@ -13,13 +14,23 @@ class Ship:
 
         self.rect.midbottom = self.screen_rect.midbottom
 
+        self.x = float(self.rect.x)
+
         # Moving Flag
         self.moving_right = False
+        self.moving_left = False
+
+        # Settings
+        self.settings = Settings()
 
     def update(self):
         """Update the ship's position base on the movement flag."""
         if self.moving_right:
-            self.rect.x += 1
+            self.x += self.settings.ship_speed
+        if self.moving_left:
+            self.x -= self.settings.ship_speed
+
+        self.rect.x = self.x
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)

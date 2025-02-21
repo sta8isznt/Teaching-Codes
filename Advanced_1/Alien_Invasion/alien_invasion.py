@@ -55,12 +55,15 @@ class Alien_Invasion:
 
     def _check_keydown_events(self, event):
         if event.key == pg.K_LEFT:
-            self.ship.rect.x -= 1
-        if event.key == pg.K_RIGHT:
+            self.ship.moving_left = True
+        elif event.key == pg.K_RIGHT:
             self.ship.moving_right = True
 
     def _check_keyup_events(self, event):
-        pass
+        if event.key == pg.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pg.K_LEFT:
+            self.ship.moving_left = False
 
 
 
