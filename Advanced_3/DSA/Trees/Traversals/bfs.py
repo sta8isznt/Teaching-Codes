@@ -1,6 +1,4 @@
-from collections import deque
-
-# BFS -> Ουρά
+# BFS -> Ουρά (Level order Traversal)
 class Queue:
     def __init__(self):
         self.queue = []
@@ -23,11 +21,11 @@ class Node:
         self.children = []
 
 def bfs(root):
-    if not root:
+    if not root: # Base case -> Very important so the recursion to come to an end!
         return
     q = Queue()
     q.enqueue(root)
-    while not q.is_empty():
+    while not q.is_empty(): # (Εξερεύνηση)
         node = q.dequeue()
         print(node.key, end=" ")
         for child in node.children:
