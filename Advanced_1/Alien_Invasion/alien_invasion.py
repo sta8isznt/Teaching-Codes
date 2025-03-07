@@ -5,18 +5,19 @@ import random
 
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 class Alien_Invasion:
     def __init__(self):
-        pg.init()
-        self.backround_image = pg.image.load("images/space_image.jpg")
-
+        self.screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
         # settings
         self.settings = Settings()
 
+        pg.init()
+        self.backround_image = pg.image.load("images/space_image.jpg")
+        self.backround_image = pg.transform.scale(self.backround_image, (self.screen.get_width(),self.screen.get_height()))
 
         # screen settings
-        self.screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         self.screen_rect = self.screen.get_rect()
@@ -28,11 +29,15 @@ class Alien_Invasion:
         # Ship
         self.ship = Ship(self)
 
+        # Bullets
+        self.bullets = pg.sprite.Group()
+
     def run(self):
         """Runs the Game"""
         while True:
             self._check_events()
             self.ship.update()
+            self.bullets.update()
             self._update_screen()
             self.clock.tick(60)
             
@@ -51,7 +56,8 @@ class Alien_Invasion:
     def _update_screen(self):
         """Updates the screen"""
         self.screen.blit(self.backround_image, (0, 0))
-
+        for bullet in self.bullets.sprites():
+            bullet.draw()
         self.ship.blitme()
         pg.display.update()
 
@@ -63,6 +69,13 @@ class Alien_Invasion:
         elif event.key == pg.K_ESCAPE:
             pg.quit()
             sys.exit()
+        elif event.key == pg.K_SPACE:
+            self._fire_bullet()
+
+    def _fire_bullet(self):
+        """Create a new bullet and add it to the Group"""
+        bullet = Bullet(self)
+        self.bullets.add(bullet)
 
     def _check_keyup_events(self, event):
         if event.key == pg.K_RIGHT:
