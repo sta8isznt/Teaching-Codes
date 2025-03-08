@@ -1,59 +1,34 @@
-import pygame
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.children = [] # List of Nodes
 
-# Initialize Pygame
-pygame.init()
+def new_node(key):
+    return Node(key)
 
-# Screen settings
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
-
-# Load explosion image
-explosion_img = pygame.image.load("explosion.png")  # Replace with your image
-explosion_img = pygame.transform.scale(explosion_img, (100, 100))  # Resize if needed
-
-class Explosion:
-    def __init__(self, x, y, duration=500):  # duration in milliseconds
-        self.image = explosion_img
-        self.x = x
-        self.y = y
-        self.start_time = pygame.time.get_ticks()  # Get the start time
-        self.duration = duration  # Duration of explosion in milliseconds
-        self.active = True  # Explosion state
-
-    def update(self):
-        # Check if the explosion has lasted long enough
-        if pygame.time.get_ticks() - self.start_time > self.duration:
-            self.active = False  # Hide the explosion
-
-    def draw(self, screen):
-        if self.active:
-            screen.blit(self.image, (self.x, self.y))
-
-# List to store active explosions
-explosions = []
-
-# Game loop
-running = True
-while running:
-    screen.fill((0, 0, 0))  # Clear screen
+# Function to find tree height
+def height(root):
+    # Base Case
+    if root == None:
+        return -1
     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:  # Simulate explosion on click
-            x, y = event.pos
-            explosions.append(Explosion(x - 50, y - 50))  # Center explosion
-    
-    # Update and draw explosions
-    for explosion in explosions:
-        explosion.update()
-        explosion.draw(screen)
+    h = -1
+    for child in root.children:
+        h = max(h, height(child))
+    return h+1 # Calculate the current node in the height
 
-    # Remove expired explosions
-    explosions = [e for e in explosions if e.active]
+# ...existing code...
 
-    pygame.display.flip()
-    clock.tick(60)
+if __name__ == "__main__":
+    # Create a tree
+    root = new_node(1)
+    root.children.append(new_node(2))
+    root.children.append(new_node(3))
+    root.children[0].children.append(new_node(4))
+    root.children[0].children.append(new_node(5))
+    root.children[1].children.append(new_node(6))
+    root.children[1].children.append(new_node(7))
+    root.children[0].children[0].children.append(new_node(8))
 
-pygame.quit()
+    # Test the height function
+    print("Height of the tree is:", height(root))

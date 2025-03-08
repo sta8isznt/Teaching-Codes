@@ -12,12 +12,15 @@ class Alien_Invasion:
         self.settings = Settings()
 
         #screen settings
-        self.screen = pg.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        self.screen = pg.display.set_mode((0,0), pg.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
         self.screen_rect = self.screen.get_rect()
         pg.display.set_caption("Alien Invasion")
 
         #Background Image
         self.bg_image = pg.image.load("Images/space_image.jpg")
+        self.bg_image = pg.transform.scale(self.bg_image, (self.settings.screen_width, self.settings.screen_height))
 
         # Window Image
         self.window_image = pg.image.load("Images/spaceship_window.png")
@@ -51,6 +54,9 @@ class Alien_Invasion:
             self.ship.moving_right = True
         elif event.key == pg.K_LEFT:
             self.ship.moving_left = True
+        elif event.key == pg.K_ESCAPE:
+            pg.quit()
+            sys.exit()
 
     def _check_keyup_events(self, event):
         if event.key == pg.K_RIGHT:
