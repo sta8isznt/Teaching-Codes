@@ -38,8 +38,17 @@ class Alien_Invasion:
             self._check_events()
             self.ship.update()
             self.bullets.update()
+            self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
+
+    def _update_bullets(self):
+        # Get rid of bullets that are out of the screen
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= self.screen_rect.top:
+                self.bullets.remove(bullet)
+        # Code for checking
+        #print(len(self.bullets))
             
 
     def _check_events(self):
@@ -74,8 +83,9 @@ class Alien_Invasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the Group"""
-        bullet = Bullet(self)
-        self.bullets.add(bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            bullet = Bullet(self)
+            self.bullets.add(bullet)
 
     def _check_keyup_events(self, event):
         if event.key == pg.K_RIGHT:
