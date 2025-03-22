@@ -1,61 +1,53 @@
+# Binary Tree Traversals
 class Node:
     def __init__(self, key):
         self.key = key
-        self.children = [] # List of Nodes
+        self.left = None
+        self.right = None
 
-def new_node(key):
-    return Node(key)
-
-# Function to find tree height
-def height(root):
-    # Base Case
+def preorder(root):
+    # Root -> Left -> Right
     if root == None:
-        return -1
-    
-    h = -1
-    for child in root.children:
-        h = max(h, height(child))
-    return h+1 # Calculate the current node in the height
+        return
+    print(root.key)
+    preorder(root.left)
+    preorder(root.right)
 
-def search_tree(root, value):
-    """Search if the value exists in the tree. If it exists return this Node"""
-    # Base case
+def inorder(root):
+    # Left -> Root -> Right
     if root == None:
-        return None
-    
-    # Check if the root key is the value
-    if root.key == value:
-        return root
-    
-    for child in root.children:
-        node = search_tree(child, value)
-        if node.key == value:
-            return node
+        return
+    inorder(root.left)
+    print(root.key)
+    inorder(root.right)
 
+def postorder(root):
+    # Left -> Right -> Root
+    if root ==None:
+        return
+    postorder(root.left)
+    postorder(root.right)
+    print(root.key)
+
+def create_sample_tree():
+    # Creating a sample binary tree
+    #         1
+    #        / \
+    #       2   3
+    #      / \
+    #     4   5
+    root = Node(1)
+    root.left = Node(2)
+    root.right = Node(3)
+    root.left.left = Node(4)
+    root.left.right = Node(5)
+    return root
 
 if __name__ == "__main__":
-    # Create a tree
-    root = new_node(1)
-    root.children.append(new_node(2))
-    root.children.append(new_node(3))
-    root.children[0].children.append(new_node(4))
-    root.children[0].children.append(new_node(5))
-    root.children[1].children.append(new_node(6))
-    root.children[1].children.append(new_node(7))
-    root.children[0].children[0].children.append(new_node(8))
-
-    # Test the height function
-    print("Height of the tree is:", height(root))
-
-    # Test the search_tree function
-    search_result = search_tree(root, 5)
-    if search_result:
-        print(f"Node with key 5 found: {search_result.key}")
-    else:
-        print("Node with key 5 not found")
-
-    search_result = search_tree(root, 10)
-    if search_result:
-        print(f"Node with key 10 found: {search_result.key}")
-    else:
-        print("Node with key 10 not found")
+    root = create_sample_tree()
+    print("Preorder Traversal:")
+    preorder(root)
+    print("\nInorder Traversal:")
+    inorder(root)
+    print("\nPostorder Traversal:")
+    postorder(root)

@@ -21,7 +21,7 @@ class Node:
         self.children = []
 
 def bfs(root):
-    if not root: # Base case -> Very important so the recursion to come to an end!
+    if not root:
         return
     q = Queue()
     q.enqueue(root)
