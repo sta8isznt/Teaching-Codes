@@ -1,53 +1,82 @@
-# Binary Tree Traversals
+class Stack:
+    def __init__(self):
+        self.stack = []
+    def push(self, item):
+        self.stack.append(item)
+    def is_empty(self):
+        return len(self.stack) == 0
+    def pop(self):
+        if not self.is_empty():
+            return  self.stack.pop()
+        return -1
+    def peek(self):
+        return self.stack[-1]
+    def size(self):
+        return len(self.stack)
+    
+class Queue:
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, item):
+        self.queue.append(item)
+    def is_empty(self):
+        return len(self.queue) == 0
+    def dequeue(self):
+        if not self.is_empty():
+            return self.queue.pop(0)
+        return -1
+    def peek(self):
+        return self.queue[0]
+    def size(self):
+        return len(self.queue)
+    
 class Node:
     def __init__(self, key):
         self.key = key
-        self.left = None
-        self.right = None
+        self.children = []
 
-def preorder(root):
-    # Root -> Left -> Right
+    
+def dfs(root):
     if root == None:
         return
-    print(root.key)
-    preorder(root.left)
-    preorder(root.right)
+    s = Stack()
+    s.push(root)
+    while not s.is_empty():
+        temp = s.pop()
+        print(temp.key)
+        for child in temp.children[::-1]:
+            s.push(child)
 
-def inorder(root):
-    # Left -> Root -> Right
-    if root == None:
+def bfs(root):
+    if not root:
         return
-    inorder(root.left)
-    print(root.key)
-    inorder(root.right)
-
-def postorder(root):
-    # Left -> Right -> Root
-    if root ==None:
-        return
-    postorder(root.left)
-    postorder(root.right)
-    print(root.key)
+    q = Queue()
+    q.enqueue(root)
+    while not q.is_empty():
+        temp = q.dequeue()
+        print(temp.key, end=" ")
+        for child in temp.children:
+            q.enqueue(child)
 
 def create_sample_tree():
-    # Creating a sample binary tree
+    # Creating a sample tree
     #         1
-    #        / \
-    #       2   3
-    #      / \
-    #     4   5
+    #       / | \
+    #      2  3  4
+    #     / \
+    #    5   6
     root = Node(1)
-    root.left = Node(2)
-    root.right = Node(3)
-    root.left.left = Node(4)
-    root.left.right = Node(5)
+    child1 = Node(2)
+    child2 = Node(3)
+    child3 = Node(4)
+    child1.children = [Node(5), Node(6)]
+    root.children = [child1, child2, child3]
     return root
 
 if __name__ == "__main__":
     root = create_sample_tree()
-    print("Preorder Traversal:")
-    preorder(root)
-    print("\nInorder Traversal:")
-    inorder(root)
-    print("\nPostorder Traversal:")
-    postorder(root)
+    print("DFS Traversal:")
+    dfs(root)
+    print()
+    bfs(root)
+
