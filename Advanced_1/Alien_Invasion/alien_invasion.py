@@ -103,18 +103,25 @@ class Alien_Invasion:
     def _create_fleet(self):
         """Create the fleet of aliens"""
         # Create an alien and keep adding aliens until there is no space left
-        # Spacing between aliens is one alien width
+        # Spacing between aliens is one alien width and one alien height
 
         alien = Alien(self)
         alien_width = alien.rect.width
+        alien_height = alien.rect.height
 
         current_x = alien_width
-        while current_x < (self.settings.screen_width - 2 * alien_width):
-            new_alien = Alien(self)
-            new_alien.x = current_x
-            new_alien.rect.x = current_x
-            self.aliens.add(new_alien)
-            current_x += 2 * alien_width
+        current_y = alien_height
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                new_alien = Alien(self)
+                new_alien.x = current_x
+                new_alien.rect.x = current_x
+                new_alien.rect.y = current_y
+                self.aliens.add(new_alien)
+                current_x += 2 * alien_width
+            # If a row is finished reset x value and increment y value
+            current_x = alien_width
+            current_y += 2 * alien_height
 
 
 my_game = Alien_Invasion()
