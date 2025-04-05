@@ -48,8 +48,14 @@ class Alien_Invasion:
             self.ship.update()
             self.bullets.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
+
+    def _update_aliens(self):
+        """Update the positions of all the aliens in the fleet"""
+        self._check_fleet_edges()
+        self.aliens.update()
 
     def _update_bullets(self):
         #  Get rid of the bullets that have disappeared
@@ -102,21 +108,41 @@ class Alien_Invasion:
         """Create the fleet of aliens"""
         # Make an Alien
         # Create an alien and keep adding aliens until there is no room left
-        # Spacing between aliens is one alien width
+        # Spacing between aliens is one alien width and one alien height
+
         new_alien = Alien(self)
         alien_width = new_alien.rect.width
+        alien_height = new_alien.rect.height
 
         current_x = alien_width
-        while current_x < (self.settings.screen_width - 2 * alien_width):
-            self._create_alien(current_x)
-            current_x += 2*alien_width
+        current_y = alien_height
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                self._create_alien(current_x, current_y)
+                current_x += 2*alien_width
+            current_x = alien_width
+            current_y += 2 * alien_height
 
-    def _create_alien(self, x_position):
+    def _create_alien(self, x_position, y_position):
         """Create an alien and place it in the row"""
         new_alien = Alien(self)
         new_alien.x = x_position
         new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
         self.aliens.add(new_alien)
+
+    def _check_fleet_edges(self):
+        """Respond appropriatly if any alien has reached an edge"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+                
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change its moving direction"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
 game = Alien_Invasion()
 game.run()
