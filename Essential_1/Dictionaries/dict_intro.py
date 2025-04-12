@@ -6,7 +6,7 @@ my_dict = {'Eua': [15, 20],
 # λεξικό μας κάνουμε παρόμοια διαδικασία με αυτήν στις λίστες
 
 print(my_dict["Panos"])
-print(my_dict.get("Adreas", "You have no such friend"))
+print(my_dict.get("Andreas", "You have no such friend"))
 # print(my_dict["Adreas"])
 
 # Ποιό είναι το πρόβλημα με αυτό?
@@ -31,3 +31,10 @@ print(my_dict)
 
 value = my_dict.pop("Panos")
 print(value + 1)
+
+my_dict = {'Eua': [15, 20],
+         'Panos' : 17,
+         'Anna': 50}
+
+for name, num in my_dict.items():
+    print(f"{name} fav num is {num}")
