@@ -38,3 +38,6 @@ my_dict = {'Eua': [15, 20],
 
 for name, num in my_dict.items():
     print(f"{name} fav num is {num}")
+
+for num in my_list:
+    print(num)
