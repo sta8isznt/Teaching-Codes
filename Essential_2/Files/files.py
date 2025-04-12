@@ -22,13 +22,3 @@ str2 = "World"
 str3 = str1 + str2
 print(str3)
 
-pi = ""
-with open("pi_digits.txt") as f:
-    lines = f.readlines()
-
-for line in lines:
-    print(pi)
-    pi = pi + line.strip()
-
-
-print(pi)

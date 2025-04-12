@@ -1,10 +1,12 @@
 import pygame as pg
 import sys
+from time import sleep
 
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 
 class Alien_Invasion:
     def __init__(self):
@@ -40,15 +42,22 @@ class Alien_Invasion:
         # Aliens
         self.aliens = pg.sprite.Group()
 
+        # Create an instance to store game statistics
+        self.stats = GameStats(self)
+        # Start Alien Invasion in an active state
+        self.game_active = True
+
         self._create_fleet()
 
     def run(self):
         while True:
             self._check_events()
-            self.ship.update()
-            self.bullets.update()
-            self._update_bullets()
-            self._update_aliens()
+
+            if self.game_active:
+                self.ship.update()
+                self.bullets.update()
+                self._update_bullets()
+                self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
@@ -56,12 +65,32 @@ class Alien_Invasion:
         """Update the positions of all the aliens in the fleet"""
         self._check_fleet_edges()
         self.aliens.update()
+        
+        # Look for alien-ship collisions
+        if pg.sprite.spritecollideany(self.ship, self.aliens):
+            self._ship_hit()
+
+        self._check_aliens_bottom()
 
     def _update_bullets(self):
         #  Get rid of the bullets that have disappeared
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= self.screen_rect.top:
                 self.bullets.remove(bullet)
+
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self):
+        # Check for any bullets that have hit aliens.
+        # If so, get rid of the bullet and the alien
+        collisions = pg.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if not self.aliens:
+            # Destroy the existings bullets and create a new fleet
+            self.bullets.empty()
+            self._create_fleet()
+
+
 
     def _check_events(self):
         for event in pg.event.get():
@@ -143,6 +172,29 @@ class Alien_Invasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
+
+    def _ship_hit(self):
+        """Respond to ship being hit by an alien"""
+        if self.stats.ships_left > 0:
+            self.stats.ships_left -= 1
+
+            self.bullets.empty()
+            self.aliens.empty()
+
+            self._create_fleet()
+            self.ship.center_ship()
+
+            sleep(2)
+        else:
+            self.game_active = False
+
+    def _check_aliens_bottom(self):
+        """Check if any aliens have reached the bottom of the screen"""
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= self.screen_rect.bottom:
+                self._ship_hit()
+                break
+
 
 game = Alien_Invasion()
 game.run()
