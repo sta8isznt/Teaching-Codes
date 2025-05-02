@@ -45,8 +45,26 @@ class Alien_Invasion:
             self.ship.update()
             self.bullets.update()
             self._update_bullets()
+            self.update_fleet()
             self._update_screen()
             self.clock.tick(60)
+
+    def update_fleet(self):
+        self._check_fleet_edges()
+        self.aliens.update()
+
+    def _check_fleet_edges(self):
+        """Respond appropriately if any alien have reached an edge"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change its moving direction"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _update_bullets(self):
         # Get rid of bullets that are out of the screen
