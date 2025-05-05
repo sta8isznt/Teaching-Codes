@@ -53,6 +53,10 @@ class Alien_Invasion:
         self._check_fleet_edges()
         self.aliens.update()
 
+        # Look for alien-ship collisions
+        if pg.sprite.spritecollideany(self.ship, self.aliens):
+            print("Ship hit!")
+
     def _check_fleet_edges(self):
         """Respond appropriately if any alien have reached an edge"""
         for alien in self.aliens.sprites():
@@ -73,6 +77,18 @@ class Alien_Invasion:
                 self.bullets.remove(bullet)
         # Code for checking
         #print(len(self.bullets))
+
+        # Check for any bullets that have hit aliens
+        # If so get rid of the bullet and the aline
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self):
+        collisions = pg.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if not self.aliens:
+            # Destroy any existing bullets and create a new fleet
+            self.bullets.empty()
+            self._create_fleet()
             
 
     def _check_events(self):
