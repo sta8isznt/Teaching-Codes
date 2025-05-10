@@ -50,7 +50,9 @@ class Alien_Invasion:
         self.game_active = False
 
         # Make the Play button
-        self.play_button = Button(self, "Play")
+        self.medium_button = Button(self, "Medium", self.screen_rect.centery)
+        self.easy_button = Button(self, "Easy", self.screen_rect.centery - 200)
+        self.hard_button = Button(self, "Hard", self.screen_rect.centery + 200)
 
         self._create_fleet()
 
@@ -164,7 +166,9 @@ class Alien_Invasion:
 
         # Draw the play button if the game is inactive
         if not self.game_active:
-            self.play_button.draw_button()
+            self.easy_button.draw_button()
+            self.medium_button.draw_button()
+            self.hard_button.draw_button()
         pg.display.update()
 
     def _create_fleet(self):
