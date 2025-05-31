@@ -49,7 +49,7 @@ class Alien_Invasion:
         # Start Alien Invasion in an inactive state
         self.game_active = False
 
-        # Make the Play button
+        # Make the buttons
         self.medium_button = Button(self, "Medium", self.screen_rect.centery)
         self.easy_button = Button(self, "Easy", self.screen_rect.centery - 200)
         self.hard_button = Button(self, "Hard", self.screen_rect.centery + 200)
